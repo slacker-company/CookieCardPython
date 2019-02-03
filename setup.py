@@ -7,10 +7,10 @@ setuptools.setup(
     name="CookieCard",
     version="0.0.1",
     author="SlackerCompany",
-    author_email="support@cookiemail.ml",
+    author_email="slackercompany@cookiemail.ml",
     description="API implementation of https://slackercompany.ml/CarteCookie/ in python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",#...
+    url="https://github.com/slacker-company/CookieCardPython",
     packages=setuptools.find_packages()
 )
