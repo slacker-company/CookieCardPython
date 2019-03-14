@@ -1,7 +1,7 @@
 import requests
 
 buildForApiVersion = "0.0.1"
-buildForApiVersionSplited = BuildForApiVersion.split(".")
+buildForApiVersionSplited = buildForApiVersion.split(".")
 
 class noLogged(Exception):
     pass
@@ -23,6 +23,21 @@ def signup(name, mail, password):
         print(e)
         return False
 
+class User():
+    def __init__(self, name):
+        tmp = requests.post("https://slackercompany.ml/CarteCookie/api/", data={"action":"getUser", "name":name}).json()
+        if not tmp["success"]:
+            self.close()
+            raise apiError(tmp["error"], tmp["errorMessage"])
+        else:
+            self.name = tmp["user"]["name"]
+            self.money = tmp["user"]["money"]
+            self.isDev = tmp["user"]["isDev"]
+            self.id = tmp["user"]["id"]
+    def close(self):
+        del(self)
+
+
 class UserRemote():
     session=None
     def __init__(self, name, password):
@@ -35,16 +50,16 @@ class UserRemote():
             self.name = tmp["user"]["name"]
             self.money = tmp["user"]["money"]
             self.mail = tmp["user"]["mail"]
-            self.isDev = tmp["user"]["money"]
+            self.isDev = tmp["user"]["isDev"]
             self.id = tmp["user"]["id"]
             tmp = self.session.post("https://slackercompany.ml/CarteCookie/api/", data={"action":"info"}).json()
             self.APIversion = tmp["APIversion"]
             minimalAPIversion = tmp["minimalAPIversion"].split(".")
-            if int(minimalAPIversion[0]) > int(BuildForApiVersionSplited[0]):
+            if int(minimalAPIversion[0]) > int(buildForApiVersionSplited[0]):
                 raise obsoletAPI()
-            elif int(minimalAPIversion[1]) > int(BuildForApiVersionSplited[1]):
+            elif int(minimalAPIversion[1]) > int(buildForApiVersionSplited[1]):
                 raise obsoletAPI()
-            elif int(minimalAPIversion[2]) > int(BuildForApiVersionSplited[2]):
+            elif int(minimalAPIversion[2]) > int(buildForApiVersionSplited[2]):
                 raise obsoletAPI()
     def transfer(self, target, amount):
         tmp = self.session.post("https://slackercompany.ml/CarteCookie/api/", data={"action":"transfer", "target":target, "amount":amount}).json()
@@ -53,7 +68,7 @@ class UserRemote():
     def disconnect(self):
         self.session.post("https://slackercompany.ml/CarteCookie/api/", data={"action":"disconnect"})
         self.close()
-    def changepassword(oldPassword, newPassword):
+    def changepassword(self, oldPassword, newPassword):
         tmp = self.session.post("https://slackercompany.ml/CarteCookie/api/", data={"action":"changePassword", "oldPassword":oldPassword, "newPassword":newPassword})
         if not tmp["success"]:
             raise apiError(tmp["error"], tmp["errorMessage"])
