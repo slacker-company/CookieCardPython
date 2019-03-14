@@ -17,7 +17,7 @@ while True:
     lastUser = currentUser
     currentUser = CookieCard.User(userName)
     if lastUser.money < currentUser.money:
-        print(f"{green}balance +{currentUser.money - lastUser.money}{reset}")
-    elif lastUser.money < currentUser.money:
-        print(f"{red}balance -{currentUser.money - lastUser.money}{reset}")
+        print(f"{green}balance +{currentUser.money - lastUser.money}{reset} ({currentUser.money})")
+    elif lastUser.money > currentUser.money:
+        print(f"{red}balance -{currentUser.money - lastUser.money}{reset} ({currentUser.money})")
     time.sleep(2.5)
